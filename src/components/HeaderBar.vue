@@ -7,8 +7,8 @@
       </a>
     </template>
     <template #right>
-      <LoginButton v-if="!isLoggedIn" />
-      <LogoutButton v-if="isLoggedIn" />
+      <!-- <LoginButton v-if="!isLoggedIn" /> -->
+      <!-- <LogoutButton v-if="isLoggedIn" /> -->
     </template>
   </Toolbar>
 </template>
@@ -24,8 +24,8 @@ import { VCARD } from "../lib/namespaces";
 export default defineComponent({
   name: "HeaderBar",
   components: {
-    LoginButton,
-    LogoutButton,
+    // LoginButton,
+    // LogoutButton,
   },
   setup() {
     const { sessionInfo, authFetch } = useSolidSession();

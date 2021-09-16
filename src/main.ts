@@ -17,9 +17,12 @@ import Toast from 'primevue/toast';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';     //optional for column grouping
+import ProgressSpinner from 'primevue/progressspinner';
+import Listbox from 'primevue/listbox';
 
 import Tooltip from 'primevue/tooltip';
 import ToastService from 'primevue/toastservice';
+
 
 import "primeflex/primeflex.css"; // layouts
 import "primevue/resources/themes/vela-green/theme.css"; // theme
@@ -45,6 +48,8 @@ app.component("Toast", Toast)
 app.component("DataTable", DataTable)
 app.component("Column", Column)
 app.component("ColumnGroup", ColumnGroup)
+app.component("ProgressSpinner", ProgressSpinner)
+app.component("Listbox", Listbox)
 
 app.directive('tooltip', Tooltip);
 
