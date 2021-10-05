@@ -40,7 +40,7 @@
   </div>
 
   <ProgressSpinner
-    style="width: 50px; height: 50px; position: absolute; top: 10px; left: 10px"
+    style="width: 50px; height: 50px; position: absolute; top: 20px; right: 20px;"
     strokeWidth="8"
     v-if="isLoading"
   />
