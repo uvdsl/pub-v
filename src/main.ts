@@ -1,18 +1,18 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import "./registerServiceWorker";
+// import "./registerServiceWorker";
 import router from "./router";
 import PrimeVue from "primevue/config";
 import Button from "primevue/button";
 import Toolbar from 'primevue/toolbar';
 import Avatar from 'primevue/avatar';
-import Card from 'primevue/card';
-import InputSwitch from 'primevue/inputswitch';
+// import Card from 'primevue/card';
+// import InputSwitch from 'primevue/inputswitch';
 import InputText from 'primevue/inputtext';
-import RadioButton from 'primevue/radiobutton';
-import Textarea from 'primevue/textarea';
-import Dialog from 'primevue/dialog';
-import SpeedDial from 'primevue/speeddial';
+// import RadioButton from 'primevue/radiobutton';
+// import Textarea from 'primevue/textarea';
+// import Dialog from 'primevue/dialog';
+// import SpeedDial from 'primevue/speeddial';
 import Toast from 'primevue/toast';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -37,13 +37,13 @@ app.use(ToastService);
 app.component("Button", Button);
 app.component("Toolbar", Toolbar);
 app.component("Avatar", Avatar)
-app.component("Card", Card)
-app.component("InputSwitch", InputSwitch)
+// app.component("Card", Card)
+// app.component("InputSwitch", InputSwitch)
 app.component("InputText", InputText)
-app.component("RadioButton", RadioButton)
-app.component("Textarea", Textarea)
-app.component("Dialog", Dialog)
-app.component("SpeedDial", SpeedDial)
+// app.component("RadioButton", RadioButton)
+// app.component("Textarea", Textarea)
+// app.component("Dialog", Dialog)
+// app.component("SpeedDial", SpeedDial)
 app.component("Toast", Toast)
 app.component("DataTable", DataTable)
 app.component("Column", Column)

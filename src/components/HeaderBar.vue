@@ -1,77 +1,27 @@
 <template>
   <Toolbar>
     <template #left>
-      <Avatar v-if="img" :image="img" shape="circle" />
-      <a :href="webId">
-        <span>{{ name }}</span>
-      </a>
+      <h1>RefBee</h1>
     </template>
-    <template #right>
-      <!-- <LoginButton v-if="!isLoggedIn" /> -->
-      <!-- <LogoutButton v-if="isLoggedIn" /> -->
-    </template>
+    <!-- <template #right>  </template> -->
   </Toolbar>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, ref, Ref, watch } from "vue";
-import LoginButton from "./buttons/LoginButton.vue";
-import LogoutButton from "./buttons/LogoutButton.vue";
-import { useSolidSession } from "../composables/useSolidSession";
-import { getResource, parseToN3 } from "../lib/solidRequests";
-import { VCARD } from "../lib/namespaces";
-
+import { defineComponent } from "vue";
 export default defineComponent({
   name: "HeaderBar",
-  components: {
-    // LoginButton,
-    // LogoutButton,
-  },
-  setup() {
-    const { sessionInfo, authFetch } = useSolidSession();
-    const { isLoggedIn, webId } = toRefs(sessionInfo);
-    let name: Ref<string | undefined> = ref();
-    let img: Ref<string | undefined> = ref();
-
-    async function getPersonalData(webId: string) {
-      const parsedN3 = await getResource(webId, authFetch.value)
-        .then((resp) => resp.text())
-        .then((respText) => parseToN3(respText, webId));
-      let query = parsedN3.store.getObjects(webId, VCARD("hasPhoto"), null);
-      const i = query.length > 0 ? query[0].value : undefined;
-      query = parsedN3.store.getObjects(webId, VCARD("fn"), null);
-      const n = query.length > 0 ? query[0].value : undefined;
-      return { n, i };
-    }
-
-    if (webId !== undefined)
-      watch(webId, () => {
-        if (webId.value !== undefined) {
-          getPersonalData(webId.value).then((pd) => {
-            name.value = pd.n;
-            img.value = pd.i;
-          });
-        } else {
-          name.value = undefined;
-          img.value = undefined;
-        }
-      });
-
-    return { isLoggedIn, webId, name, img };
-  },
+  components: {},
+  setup() {},
 });
 </script>
 
 <style lang="scss">
 .p-toolbar-group-left {
-  span {
+  h1 {
     margin-left: 10px;
     font-size: 150%;
+    color: var(--primary-color);
   }
-}
-
-a {
-  color: inherit; /* blue colors for links too */
-  text-decoration: inherit; /* no underline */
 }
 </style>
