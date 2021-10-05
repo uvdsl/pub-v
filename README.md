@@ -1,11 +1,11 @@
-# Publication - Visualiser (Pub-V)
+# RefBee
 
 Display where the authors publications are listed, e.g. on Google Scholar, DBLP, ...
 
 ## Build and run using Docker
 ```
-docker build -t pub-v:latest .
-docker run -d -p 8080:80 --name Pub-V pub-v:latest
+docker build -t refbee-v:latest .
+docker run -d -p 80:80 refbee-v:latest
 ```
 
 ## Project setup
