@@ -1,3 +1,3 @@
 module.exports = {
-    baseUrl: '/services/refbee/'
+    publicPath: process.env.APP_BASE_PATH
 }
