@@ -91,9 +91,10 @@ export default defineComponent({
     ]);
 
     const query = async () => {
+      const queryEndpoint = "http://km.aifb.kit.edu/services/refbeebackend/"
       data.value = []
       data.value = await fetch(
-        "http://127.0.0.1:5000/" + wikiDataEntity.value
+        queryEndpoint + wikiDataEntity.value
       ).then((response) => {
         if (response.ok == false) {
           throw new Error(
