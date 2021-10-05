@@ -1,6 +1,7 @@
 # RefBee
 
-Display where the authors publications are listed, e.g. on Google Scholar, DBLP, ...
+A little busy bee to display where the authors publications are listed, e.g. on Google Scholar, DBLP, ...
+Depends on this [bee hive](https://github.com/kmdn/ResearcherPublicationMapping.git) as backend.
 
 ## Build and run using Docker
 ```
