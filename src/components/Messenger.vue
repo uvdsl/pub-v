@@ -18,7 +18,7 @@
         optionLabel="bio"
         :options="search_result"
         :disabled="isLoading"
-        listStyle="max-height: 10vh"
+        :listStyle=" data.length > 0 ? `max-height: 10vh` : undefined"
       />
       <!-- <Card v-for="entry in search_result" :key="entry.entity">
         <template #content>
@@ -109,7 +109,6 @@ export default defineComponent({
     ]);
 
     const query = async () => {
-      console.log("fire");
       const queryEndpoint = "http://km.aifb.kit.edu/services/refbeebackend/";
       data.value = [];
       data.value = await fetch(
@@ -124,6 +123,14 @@ export default defineComponent({
           .json()
           .then((data) => Object.values(Object.values(data)[0]));
       });
+      if (data.value.length ==0) {
+        toast.add({
+              severity: "error",
+              summary: "No records anywhere!",
+              detail: `Did not find any records anywhere of ${name.value}, the ${wikiDataEntity.value.bio}.`,
+              life: 5000,
+            });
+      }
     };
 
     const search = async () => {
@@ -155,7 +162,7 @@ export default defineComponent({
           toast.add({
               severity: "info",
               summary: "Loading...",
-              detail: `Loading references of ${name.value} (WikiData ${wikiDataEntity.value.entity})`,
+              detail: `Loading records of ${name.value} (WikiData ${wikiDataEntity.value.entity})`,
               life: 5000,
             });
         } else {
