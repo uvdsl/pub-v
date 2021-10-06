@@ -9,19 +9,28 @@
       />
       <Button label="Search" @click="search" />
     </div>
-      <div v-if="search_result.length !== 0" class="p-text-center p-col-6 p-row p-offset-3">
-    <Listbox
-      v-model="wikiDataEntity"
-      :options="search_result"
-    />
+    <div
+      v-if="search_result.length !== 0"
+      class="p-text-center p-col-6 p-row p-offset-3"
+    >
+      <Listbox
+        v-model="wikiDataEntity"
+        optionLabel="bio"
+        :options="search_result"
+        :disabled="isLoading"
+        listStyle="max-height: 10vh"
+      />
+      <!-- <Card v-for="entry in search_result" :key="entry.entity">
+        <template #content>
+          {{ entry.bio }}
+        </template>
+      </Card> -->
+    </div>
   </div>
-  </div>
-
-
 
   <div class="table p-text-center" v-if="data.length > 0">
-    <DataTable :value="data" responsiveLayout="scroll">
-      <Column field="title" header="Title"></Column>
+    <DataTable :value="data" :scrollable="true" scrollHeight="65vh">
+      <Column field="title" header="Title" style="min-width: 20vw"></Column>
       <Column
         v-for="col of columns"
         :field="col.field"
@@ -40,19 +49,28 @@
   </div>
 
   <ProgressSpinner
-    style="width: 50px; height: 50px; position: absolute; top: 20px; right: 20px;"
+    style="
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    "
     strokeWidth="8"
     v-if="isLoading"
   />
+   <Toast position="top-center" />
 </template>
 
 <script >
 import { defineComponent, ref, watch } from "vue";
+import { useToast } from "primevue/usetoast";
 
 export default defineComponent({
   name: "Messenger",
   components: {},
   setup() {
+    const toast = useToast();
     let isLoading = ref(false);
     let name = ref("");
     let search_result = ref([]);
@@ -91,10 +109,11 @@ export default defineComponent({
     ]);
 
     const query = async () => {
-      const queryEndpoint = "http://km.aifb.kit.edu/services/refbeebackend/"
-      data.value = []
+      console.log("fire");
+      const queryEndpoint = "http://km.aifb.kit.edu/services/refbeebackend/";
+      data.value = [];
       data.value = await fetch(
-        queryEndpoint + wikiDataEntity.value
+        queryEndpoint + wikiDataEntity.value.entity
       ).then((response) => {
         if (response.ok == false) {
           throw new Error(
@@ -109,22 +128,46 @@ export default defineComponent({
 
     const search = async () => {
       isLoading.value = true;
-      search_result.value = []
-      data.value = []
+      search_result.value = [];
+      data.value = [];
+
       const endpointUrl = "https://query.wikidata.org/sparql";
-      const sparqlQuery =
-        `SELECT ?entity WHERE {?entity rdfs:label "` + name.value + `"@en.}`;
+      const sparqlQuery = `SELECT ?entity ?bio ?img 
+          WHERE {
+            ?entity rdfs:label "${name.value}"@en;
+                    schema:description ?bio .
+            OPTIONAL { ?entity wdt:P18 ?img }
+            FILTER(lang(?bio)='en')
+          }`;
+
       const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
       queryDispatcher.query(sparqlQuery).then((data) => {
-        let search_result_array = data.results.bindings.map((entry) => {
+        const bindings = data.results.bindings.map((entry) => {
           const split = entry.entity.value.split("/");
-          return split[split.length - 1];
+          const entity = split[split.length - 1];
+          const bio = entry.bio.value;
+          const img = entry.img ? entry.img.value : undefined;
+          return { entity, bio, img };
         });
-        if (search_result_array.length == 1) {
-          wikiDataEntity.value = search_result_array[0]
+        search_result.value = bindings;
+        if (bindings.length == 1) {
+          wikiDataEntity.value = bindings[0];
+          toast.add({
+              severity: "info",
+              summary: "Loading...",
+              detail: `Loading references of ${name.value} (WikiData ${wikiDataEntity.value.entity})`,
+              life: 5000,
+            });
         } else {
-          search_result.value = search_result_array
           isLoading.value = false;
+        }
+        if (bindings.length == 0) {
+           toast.add({
+              severity: "error",
+              summary: "Who is this?",
+              detail: `Did not find any ${name.value} at WikiData...`,
+              life: 5000,
+            });
         }
       });
     };
@@ -182,5 +225,12 @@ export default defineComponent({
 }
 .size {
   width: 50px;
+}
+
+.pi-check {
+  color: var(--primary-color);
+}
+.pi-times {
+  color: crimson;
 }
 </style>
