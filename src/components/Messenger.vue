@@ -206,7 +206,7 @@ export default defineComponent({
       { field: "Dimensions", header: "Dimensions" },
       { field: "Microsoft Academic", header: "MS Academic " },
       { field: "DNB/GNB", header: "DNB/GNB" },
-      { field: "ACM Digital Library", header: "ACM DL" },
+      // { field: "ACM Digital Library", header: "ACM DL" },
       // { field: "crossref", header: "CrossRef" },
     ]);
     return {
