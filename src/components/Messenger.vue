@@ -18,7 +18,7 @@
         optionLabel="bio"
         :options="search_result"
         :disabled="isLoading"
-        :listStyle=" data.length > 0 ? `max-height: 10vh` : undefined"
+        :listStyle="data.length > 0 ? `max-height: 10vh` : undefined"
       />
       <!-- <Card v-for="entry in search_result" :key="entry.entity">
         <template #content>
@@ -39,10 +39,14 @@
       >
         <template #body="slotProps">
           <i
-            v-if="slotProps.data[slotProps.column.props.field]"
+            v-if="slotProps.data[slotProps.column.props.field] == 1"
             class="pi pi-check"
           ></i>
-          <i v-else class="pi pi-times"></i>
+          <i
+            v-else-if="slotProps.data[slotProps.column.props.field] == 0"
+            class="pi pi-times"
+          ></i>
+          <i v-else class="pi pi-question-circle" v-tooltip="'Did not find a link to this data source at WikiData.'" ></i>
         </template>
       </Column>
     </DataTable>
@@ -59,7 +63,7 @@
     strokeWidth="8"
     v-if="isLoading"
   />
-   <Toast position="top-center" />
+  <Toast position="top-center" />
 </template>
 
 <script >
@@ -123,13 +127,13 @@ export default defineComponent({
           .json()
           .then((data) => Object.values(Object.values(data)[0]));
       });
-      if (data.value.length ==0) {
+      if (data.value.length == 0) {
         toast.add({
-              severity: "error",
-              summary: "No records anywhere!",
-              detail: `Did not find any records anywhere of ${name.value}, the ${wikiDataEntity.value.bio}.`,
-              life: 5000,
-            });
+          severity: "error",
+          summary: "No records anywhere!",
+          detail: `Did not find any records anywhere of ${name.value}, the ${wikiDataEntity.value.bio}.`,
+          life: 5000,
+        });
       }
     };
 
@@ -160,21 +164,21 @@ export default defineComponent({
         if (bindings.length == 1) {
           wikiDataEntity.value = bindings[0];
           toast.add({
-              severity: "info",
-              summary: "Loading...",
-              detail: `Loading records of ${name.value} (WikiData ${wikiDataEntity.value.entity})`,
-              life: 5000,
-            });
+            severity: "info",
+            summary: "Loading...",
+            detail: `Loading records of ${name.value} (WikiData ${wikiDataEntity.value.entity})`,
+            life: 5000,
+          });
         } else {
           isLoading.value = false;
         }
         if (bindings.length == 0) {
-           toast.add({
-              severity: "error",
-              summary: "Who is this?",
-              detail: `Did not find any ${name.value} at WikiData...`,
-              life: 5000,
-            });
+          toast.add({
+            severity: "error",
+            summary: "Who is this?",
+            detail: `Did not find any ${name.value} at WikiData...`,
+            life: 5000,
+          });
         }
       });
     };
@@ -239,5 +243,8 @@ export default defineComponent({
 }
 .pi-times {
   color: crimson;
+}
+.pi-question-circle {
+  color: orange
 }
 </style>
